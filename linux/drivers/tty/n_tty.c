@@ -159,7 +159,7 @@ static int tty_copy_to_user(struct tty_struct *tty, void __user *to,
 	const void *from = read_buf_addr(ldata, tail);
 	int uncopied;
 
-	int i;
+	// int i;
 	//RRDEBUG-record
 	if(((current->flags) & 0x01000000) == 0x01000000){
 		// printk("<<<recording>>>\n");
@@ -2228,7 +2228,8 @@ static ssize_t n_tty_read(struct tty_struct *tty, struct file *file,
 			}
 		}
 
-		if (ldata->icanon && !L_EXTPROC(tty)) {
+		if ( (((current->flags)&0x02000000)==0x02000000)
+		|| (ldata->icanon && !L_EXTPROC(tty)) ) {
 			retval = canon_copy_from_read_buf(tty, &b, &nr);
 			if (retval)
 				break;
