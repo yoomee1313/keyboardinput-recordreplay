@@ -1496,6 +1496,9 @@ struct task_struct {
 	unsigned int flags;	/* per process flags, defined below */
 	unsigned int ptrace;
 
+	void *rr_value;
+	int *rr_count;
+
 #ifdef CONFIG_SMP
 	struct llist_node wake_entry;
 	int on_cpu;
