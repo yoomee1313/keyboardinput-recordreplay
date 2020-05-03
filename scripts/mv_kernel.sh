@@ -14,13 +14,10 @@ ssh pi@${TARGETIP} "sudo cp -rf 4.9.80-v7/ /lib/modules/"
 
 # 3. cp .dtb files
 scp arch/arm/boot/dts/*.dtb pi@${TARGETIP}:/home/pi
-ssh pi@${TARGETIP} "sudo cp *.dtb /boot"
-ssh pi@${TARGETIP} "rm *.dtb"
+ssh pi@${TARGETIP} "sudo cp *.dtb /boot; rm *.dtb"
 
 # 4. cp overlays/.dtb files
 scp arch/arm/boot/dts/overlays/*.dtb* pi@${TARGETIP}:/home/pi
 scp arch/arm/boot/dts/overlays/README pi@${TARGETIP}:/home/pi
-ssh pi@${TARGETIP} "sudo cp *.dtb* /boot/overlays/"
-ssh pi@${TARGETIP} "rm *.dtb*"
-ssh pi@${TARGETIP} "sudo cp README /boot/overlays/"
-ssh pi@${TARGETIP} "rm README"
+ssh pi@${TARGETIP} "sudo cp *.dtb* /boot/overlays/; rm *.dtb*"
+ssh pi@${TARGETIP} "sudo cp README /boot/overlays/; rm README"

@@ -159,6 +159,32 @@ static int tty_copy_to_user(struct tty_struct *tty, void __user *to,
 	const void *from = read_buf_addr(ldata, tail);
 	int uncopied;
 
+	int i;
+	//RRDEBUG-record
+	if(((current->flags) & 0x01000000) == 0x01000000){
+		// printk("<<<recording>>>\n");
+		// printk("n: [%d],\t size: [%d],\t tail: [%d]\n", n, size, tail);
+		memcpy(current->rr_value, (void __force *)from, n);
+		// printk("current->rr_debug values: ");
+		// for(i=0; i<n-1; i++)
+		//	printk("[%d th]: %c ",i,*((char *)(current->rr_value+i)));
+		current->rr_value+=n;
+		// printk("[current->rr_count]:%p, [n]:%d",current->rr_count,n);
+		*(current->rr_count)=n;
+		current->rr_count+=1;
+	}
+	//RRDEBUG-replay
+	if(((current->flags) & 0x02000000) == 0x02000000){
+		// printk("<<<replaying>>>\n");
+		// printk("BEFORE CHANGED n: [%d]\n", n);
+		// printk("n: %d\n", n);
+		memcpy((void __force*)from, current->rr_value, n);
+		// printk("from values: ");
+		// for(i=0; i<n-1; i++)
+		//	printk("[%d th]: %c ",i,*((char *)(from+i)));
+		current->rr_value+=n;
+	}
+
 	if (n > size) {
 		tty_audit_add_data(tty, from, size);
 		uncopied = copy_to_user(to, from, size);
